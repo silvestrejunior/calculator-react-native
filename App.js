@@ -4,7 +4,7 @@ import Button from './src/components/Button';
 import Display from './src/components/Display';
 
 export default function App() {
-  const [ value, setValue] = useState('0')
+  const [ value, setValue] = useState('')
   const [ displayValue, setDisplayValue] = useState("0")
   const [ showResult, setShowResult] = useState(false)
 
@@ -14,12 +14,12 @@ export default function App() {
       setDisplayValue(n)
     } else{
       if(displayValue === "0"){
-      return setDisplayValue("" + n)
+      return setDisplayValue("" + `${n}`)
       }
       if(n === '.' && displayValue.includes('.')){
         return
       }
-      setDisplayValue(displayValue+n)
+      setDisplayValue(`${displayValue}${n}`)
     }
   }
   const clearMemory = () =>{
@@ -43,10 +43,15 @@ export default function App() {
   }
 
   const eraseNumber = () =>{
-    if(displayValue.length === 1){
-      return setDisplayValue('0')
+    if(showResult === true){
+      clearMemory()
+      setShowResult(false)
+    }else{
+      if(displayValue.length === 1){
+        return setDisplayValue('0')
+      }
+      setDisplayValue(displayValue.slice(0,-1))
     }
-    setDisplayValue(displayValue.slice(0,-1))
   }
 
 
@@ -55,7 +60,7 @@ export default function App() {
       <Display value1={value} value={displayValue}></Display>
       <View style={styles.buttons}>
         <Button label={'CE'} duble onClick={clearMemory}></Button>
-        <Button label={'<='} erase onClick={eraseNumber}></Button>
+        <Button label={'<='} erase onClick={()=>eraseNumber()}></Button>
         <Button label={'7'} onClick={()=> addDigit(7)}></Button>
         <Button label={'8'} onClick={()=> addDigit(8)}></Button>
         <Button label={'9'} onClick={()=> addDigit(9)}></Button>
